@@ -1,123 +1,115 @@
-# User Management API with JWT Authentication
+# **User Management API with JWT Authentication**
 
-# Overview
+## **Project Overview**
 
-This project is designed to provide an API for managing users with JWT authentication. It supports user registration, login, and management with role-based access control (RBAC) for users and administrators.
+This project implements a **RESTful API** for **user registration**, **authentication**, and **management**. It uses **JSON Web Token (JWT)** for securing API routes and provides **role-based access control** for different types of users (e.g., **user** and **admin**). The project is built using **Spring Boot** and supports basic operations like **user registration**, **login**, and **profile management**.
 
-# Technologies Used
+## **Features**
 
-~Java (Spring Boot)
-~Spring Security for authentication and authorization
-~JWT (JSON Web Tokens) for stateless authentication
-~Spring Data JPA for database interaction
+- **User Registration**: Allows users to create an account by providing necessary information.
+- **User Login**: Users can authenticate using their credentials and receive a **JWT token**.
+- **Role-Based Access Control**: Differentiates users with roles like **user** and **admin**.
+- **JWT Authentication**: Secure routes using **JWT** for authenticated access.
+- **Profile Management**: Allows users to manage their profiles and update personal details.
 
-# Features
+## **Technologies Used**
 
-1. User Registration: Allows users to register with a username and password.
-2. User Authentication: Users can log in with their username and password to receive a JWT token.
-3. Role-based Access Control: Differentiates between user and admin roles for route protection.
-4. JWT Authentication: Uses JWT tokens to secure the endpoints.
-5. Exception Handling: Custom exception for "user not found."
+- **Spring Boot**: Framework for building the backend.
+- **Spring Security**: For implementing **JWT-based** authentication and **role-based access control**.
+- **JWT (JSON Web Token)**: For securing API endpoints.
+- **H2 Database**: In-memory database for storing user data 
+- **Maven**: For managing dependencies.
 
-# End Points
+## **API Endpoints**
 
-1. POST /register - User Registration
-This endpoint allows new users to register by providing a username and password.
+### **User Registration**
 
-Request Body:
+- **URL**: `/api/auth/register`
+- **Method**: `POST`
+- **Description**: Registers a new user in the system.
+- **Request Body**:
+
+  ```json
+  {
+    "username": "Qwerty",
+    "password": "string",
+    "email": "example@example.com"
+  }
+# User Login
+- **URL**: /api/auth/login
+- **Method**: POST
+- **Description**: Logs in an existing user and returns a JWT token for authentication.
+- **Request Body**:
 {
-  "username": "exampleUser",
-  "password": "password123"
+  "username": "name",
+  "password": "string"
 }
-
-Response:
-~ 201 Created: User successfully registered.
-~ 400 Bad Request: If the request body is missing or invalid.
-
-2. POST /login - User Login
-This endpoint allows users to log in using their username and password. Upon successful authentication, the server returns a JWT token.
-
-Request Body:
+- **Response**:
 {
-  "username": "exampleUser",
-  "password": "password123"
+  "token": "JWT_TOKEN_HERE"
 }
+# Get User Profile (Protected Route)
+- **URL**: /api/user/profile
+- **Method**: GET
+- **Description**: Returns the profile of the authenticated user.
+- **Headers**:
+  - **Authorization**: Bearer JWT_TOKEN 
+Example:
 
-Response:
-200 OK: Returns JWT token.
-{
-  "token": "jwt_token_here"
-}
-~401 Unauthorized: If the username or password is incorrect.
+curl -X GET http://localhost:9080/api/user/profile -H "Authorization: Bearer JWT_TOKEN"
 
-3. GET /user/{username} - Get User Details
-This endpoint retrieves details of the user based on their username. Only accessible by authenticated users.
+* Admin Dashboard (Admin Only)
+- **URL**: /api/admin/dashboard
+- **Method**: GET
+- **Description**: Returns a dashboard for admin users. Only accessible by users with the admin role.
+- **Headers**:
+  - **Authorization**: Bearer JWT_TOKEN
+Example:
 
-Path Parameter:
+curl -X GET http://localhost:9080/api/admin/dashboard -H "Authorization: Bearer JWT_TOKEN"
 
-username: The username of the user to fetch.
-Response:
+# Authentication Flow
 
-200 OK: Returns user details.
-{
-  "username": "exampleUser",
-  "role": "USER"
-}
-404 Not Found: If the user does not exist.
+1. Registration: Users register by providing their username, password, and email.
+2. Login: Users authenticate by providing their credentials and receive a JWT token.
+3. Authenticated Routes: For protected routes, the JWT token needs to be included in the Authorization header of the request.
+4. Role-Based Access: Admin routes require the user to have the admin role, which is determined when the user logs in.
 
-4. GET /admin/dashboard - Admin Dashboard (Protected Route)
-This endpoint is only accessible to users with an admin role. It returns an admin dashboard.
+# Setup and Installation
 
-Response:
-~ 200 OK: Returns admin data.
-~ 403 Forbidden: If the user does not have the admin role.
+**Prerequisites**
 
-# Authentication & Authorization
-
-JWT Authentication: The application uses JWT tokens for stateless authentication. The token is included in the Authorization header of requests to protected endpoints.
-Authorization Header Format: Bearer <JWT_TOKEN>
-Role-based Access: The system differentiates between USER and ADMIN roles:
-USER: Basic user with access to their own data.
-ADMIN: Admin users have access to all user data and protected admin endpoints.
-
-# Implementation Details
-
-User Registration
-When a user registers, their password is hashed using a secure hashing algorithm (e.g., BCrypt). The hashed password is then stored in the database, and the user is saved with the role USER.
-
-JWT Token Generation
-Upon successful login, the server generates a JWT token containing the username and role as claims. The token is signed with a secret key to prevent tampering. This token is returned to the user and should be sent with subsequent requests to access protected routes.
-
-JWT Token Validation
-Each request to a protected endpoint checks the validity of the provided JWT token. If the token is valid, the user's identity is extracted from the token, and access is granted. If the token is invalid or expired, a 401 Unauthorized response is returned.
-
-Role-Based Route Protection
-The routes requiring authentication and authorization are protected using Spring Security. The @PreAuthorize or @Secured annotations are used to enforce role-based access control.
-
-Exception Handling
-The system includes custom exception handling for cases such as:
-
-UserNotFoundException: Thrown when a user is not found during authentication or user retrieval.
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException(String message) {
-        super(message);
-    }
-}
-
-# Setup Instructions
-
-1. Clone the Repository: Clone the repository to your local machine using:
-git clone <repository_url>
-2. Build the Application:
-If you're using Maven:
-mvn clean install
-If you're using Gradle:
-gradle build
-3. Run the Application: You can run the application using:
-mvn spring-boot:run
-or from your IDE by running the main class Application.java.
-4. Testing the Endpoints: Use Postman or any HTTP client to test the API. Start by registering a new user, then log in to get the JWT token. Use the token to access protected endpoints.
+- **Java 11+**
+- **Maven** 
+- **Postman** 
+- **Spring Boot** 
  
+# Steps to Set Up the Project
+1. Clone the repository: 
+2. Build the project:
+mvn clean install
+3. Run the application:
+mvn spring-boot:run
+4. The application will run on http://localhost:9080.
+
+# Security Considerations
+
+- All routes requiring authentication will check for a valid JWT token in the Authorization header.
+- The token must be prefixed with Bearer.
+- The JWT token is issued upon successful login and is valid for a set period.
+
+# Testing the API
+
+You can use tools like Postman or cURL to test the API endpoints. For example, to get the user profile, include the JWT token in the Authorization header:
+
+curl -X GET http://localhost:9080/api/user/profile -H "Authorization: Bearer YOUR_JWT_TOKEN"
+
+**Role-Based Access**
+
+- **User Role**: Basic user with access to their profile and personal - information.
+- **Admin Role**: Admin users have access to admin-only routes, such as the admin dashboard. Admins are able to perform administrative tasks in the application.
+
 # Conclusion
 
-This API provides basic functionality for managing users, authenticating them with JWT tokens, and using role-based access control for route protection. It supports the user registration, login, and administration dashboard features, with JWT-based authentication ensuring that only authorized users can access specific routes.
+This project demonstrates a simple implementation of JWT-based authentication in a user management system. The system supports basic user registration, login, profile management, and role-based access control for different user types.
+
