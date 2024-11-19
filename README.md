@@ -31,7 +31,7 @@ This project implements a **RESTful API** for **user registration**, **authentic
 
   ```json
   {
-    "username": "Qwerty",
+    "username": "name",
     "password": "string",
     "email": "example@example.com"
   }
@@ -46,7 +46,7 @@ This project implements a **RESTful API** for **user registration**, **authentic
 }
 - **Response**:
 {
-  "token": "JWT_TOKEN_HERE"
+  "token": "eyJhbGciOiJIUzIlNiJ9.eyJyb2x1IjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwidXN1c19pZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzMTU1NzAxLCJzdWIiOiJhZG1pbiJ9.aNHtaBa-7WDXO_MM183MG9wxT00MnMmEwdjgzS0rh0g"
 }
 # Get User Profile (Protected Route)
 - **URL**: /api/user/profile
@@ -58,7 +58,7 @@ Example:
 
 curl -X GET http://localhost:9080/api/user/profile -H "Authorization: Bearer JWT_TOKEN"
 
-* Admin Dashboard (Admin Only)
+ **Admin Dashboard** 
 - **URL**: /api/admin/dashboard
 - **Method**: GET
 - **Description**: Returns a dashboard for admin users. Only accessible by users with the admin role.
@@ -85,7 +85,7 @@ curl -X GET http://localhost:9080/api/admin/dashboard -H "Authorization: Bearer 
 - **Spring Boot** 
  
 # Steps to Set Up the Project
-1. Clone the repository: 
+1. Clone the repository: https://github.com/Myrzakanova
 2. Build the project:
 mvn clean install
 3. Run the application:
@@ -102,7 +102,8 @@ mvn spring-boot:run
 
 You can use tools like Postman or cURL to test the API endpoints. For example, to get the user profile, include the JWT token in the Authorization header:
 
-curl -X GET http://localhost:9080/api/user/profile -H "Authorization: Bearer YOUR_JWT_TOKEN"
+curl -X GET http://localhost:9080/api/user/profile -H "Authorization: Bearer YeyJhbGciOiJIUzIlNiJ9.eyJyb2x1IjpbIlJPTE
+VfQURNSU4iLCJST0xFX1VTRVIiXSwidXN1c19pZCI6IjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzMTU1NzAxLCJzdWIiOiJhZG1pbiJ9.aNHtaBa-7WDXO_MM183MG9wxT00MnMmEwdjgzS0rh0g
 
 **Role-Based Access**
 
